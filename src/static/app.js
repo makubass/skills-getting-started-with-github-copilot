@@ -21,9 +21,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const spotsLeft = details.max_participants - details.participants.length;
 
         // Build participants list HTML
-        const participantsList = details.participants.length > 0
-          ? `<ul>${details.participants.map(p => `<li>${p}</li>`).join("")}</ul>`
-          : "<p><em>No participants yet</em></p>";
+          const participantsList = details.participants.length > 0
+            ? `<ul class="participants-list">${details.participants.map(p => `
+                <li class="participant-item">
+                  <span class="participant-email">${p}</span>
+                  <span class="delete-icon" title="Remove" data-email="${p}" data-activity="${name}">&#128465;</span>
+                </li>`).join("")}</ul>`
+            : "<p><em>No participants yet</em></p>";
 
         activityCard.innerHTML = `
           <h4>${name}</h4>
@@ -37,6 +41,30 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         activitiesList.appendChild(activityCard);
+
+          // 削除アイコンのクリックイベントを追加
+          activityCard.querySelectorAll('.delete-icon').forEach(icon => {
+            icon.addEventListener('click', async (e) => {
+              const email = icon.getAttribute('data-email');
+              const activity = icon.getAttribute('data-activity');
+              if (confirm(`${email} を ${activity} から削除しますか？`)) {
+                try {
+                  const res = await fetch(`/activities/${encodeURIComponent(activity)}/unregister?email=${encodeURIComponent(email)}`, {
+                    method: 'DELETE'
+                  });
+                  if (res.ok) {
+                    // UIを再読み込み
+                    location.reload();
+                  } else {
+                    const data = await res.json();
+                    alert(data.detail || '削除に失敗しました');
+                  }
+                } catch (err) {
+                  alert('通信エラーが発生しました');
+                }
+              }
+            });
+          });
 
         // Add option to select dropdown
         const option = document.createElement("option");
