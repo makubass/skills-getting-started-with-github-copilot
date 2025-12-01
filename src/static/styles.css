@@ -38,6 +38,33 @@ main {
 @media (min-width: 768px) {
   main {
     grid-template-columns: 2fr 1fr;
+}
+
+/* 参加者リストの箇条書きを非表示 */
+.participants-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.participant-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+.participant-email {
+  flex: 1;
+}
+.delete-icon {
+  cursor: pointer;
+  color: #d32f2f;
+  font-size: 1.2em;
+  margin-left: 4px;
+  transition: color 0.2s;
+}
+.delete-icon:hover {
+  color: #b71c1c;
+}
   }
 }
 
@@ -141,4 +168,25 @@ footer {
   margin-top: 30px;
   padding: 20px;
   color: #666;
+}
+
+.participants-section {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+}
+
+.participants-section ul {
+  margin: 10px 0 0 20px;
+  padding: 0;
+}
+
+.participants-section li {
+  margin: 5px 0;
+  color: #555;
+}
+
+.participants-section em {
+  color: #999;
+  font-style: italic;
 }
